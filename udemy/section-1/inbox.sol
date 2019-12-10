@@ -10,8 +10,7 @@ contract Inbox {
     function SetMessage(string memory newMessage) public {
         message = newMessage;
     }
-
-    function GetMessage() public view returns (string memory) {
-        return message;
-    }
 }
+
+// Ropsten Testnet Network
+// Contract 0x68618aeE6bF43944EE6F709d9Ee2C24706b77F49
