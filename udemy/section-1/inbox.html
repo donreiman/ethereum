@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        #messageContainer {
+            padding: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <input type="text" id="messageTextBox" /> <button type="button" onclick="setMessageButtonClick()">set message</button>
+        <br />
+        <button type="button" onclick="getMessageButtonClick()">get message</button>
+        <div id="messageContainer">
+
+        </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/ethjs@0.3.4/dist/ethjs.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script> -->
+<!-- <script src="https://wallet.metamask.io/metamascara.js"></script> -->
+<script>
+    // var ethereumProvider = metamask.createDefaultProvider();
+    var eth = new Eth(new Eth.HttpProvider('https://ropsten.infura.io'));
+    var contractAddress = '0x68618aeE6bF43944EE6F709d9Ee2C24706b77F49';
+    var abi = [
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "initialMessage",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "constant": false,
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "newMessage",
+                    "type": "string"
+                }
+            ],
+            "name": "SetMessage",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "message",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        }
+    ];
+    var ethContract = eth.contract(abi);
+    var inboxContract = ethContract.at(contractAddress);
+    var account;
+
+    eth.accounts().then(function(accounts) {
+        console.log(accounts);
+    });
+
+    function getMessageButtonClick() {
+        document.getElementById('messageContainer').innerText = '';
+        inboxContract.message().then(function(response) {
+            document.getElementById('messageContainer').innerText = response[0];
+        });
+    }
+
+    function setMessageButtonClick() {
+        var messageTextBoxValue = document.getElementById('messageTextBox').value;
+        web3.currentProvider.enable().then(function(responseAddress) {
+            inboxContract.SetMessage(messageTextBoxValue, {
+                    from: responseAddress
+                }
+            );
+        });
+    }
+</script>
+
+</html>
