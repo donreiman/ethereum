@@ -1,3 +1,0 @@
-# ethjs
-
-ethjs examples
