@@ -2,8 +2,8 @@ pragma solidity ^0.6.1;
 
 contract Faucet {
     function withdraw(uint withdraw_amount) public {
-        // limit widthdrawl amount to 0.1 ETH = 100,000,000,000,000,000 wei
-        require(withdraw_amount < 100000000000000000, 'insufficient funds');
+        // limit withdrawal amount to 0.1 ETH = 100,000,000,000,000,000 wei
+        require(withdraw_amount < 100000000000000000, 'requested amount is too large');
 
         // send requested amount of ether
         msg.sender.transfer(withdraw_amount);
